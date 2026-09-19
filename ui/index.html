@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Mars Rover Mission Control</title>
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+<header>
+  <div>
+    <div class="eyebrow">MARS ROVER NAVIGATION SIMULATOR</div>
+    <h1>Gale Crater Mission Control</h1>
+  </div>
+  <nav>
+    <button class="nav active" data-page="mission">Mission Control</button>
+    <button class="nav" data-page="comparison">A* vs Dijkstra</button>
+    <button class="nav" data-page="terrain">Terrain</button>
+  </nav>
+</header>
+
+<main>
+<section id="mission" class="page active">
+  <div class="layout">
+    <div class="map-card">
+      <div class="map-head">
+        <div><b>Gale Crater Navigation Grid</b><span id="mapStatus">Loading terrain…</span></div>
+        <div class="legend"><span class="dot base"></span> Base <span class="dot target"></span> Target <span class="dot rover"></span> Rover <span class="dot hazard"></span> Hazard</div>
+      </div>
+      <canvas id="map" width="700" height="700" aria-label="Interactive Gale Crater terrain map"></canvas>
+      <div class="map-help">Click the map to set the mission target. Coordinates are navigation-grid row, column.</div>
+    </div>
+
+    <aside class="panel">
+      <h2>Mission</h2>
+      <div class="form-grid">
+        <label>Target row <input id="goalR" type="number" min="0" max="99" value="99"></label>
+        <label>Target column <input id="goalC" type="number" min="0" max="99" value="99"></label>
+      </div>
+      <label>Algorithm
+        <select id="algorithm">
+          <option value="astar">A*</option>
+          <option value="dijkstra">Dijkstra</option>
+        </select>
+      </label>
+      <label>Starting battery (%) <input id="battery" type="number" min="1" max="100" value="100"></label>
+      <button id="plan" class="primary">PLAN MISSION</button>
+      <button id="run" disabled>START ROVER</button>
+      <button id="addHazard">SIMULATE NEW HAZARD</button>
+      <button id="clearHazards">CLEAR NEW HAZARDS</button>
+
+      <div class="stats">
+        <div><span>Status</span><strong id="status">Ready</strong></div>
+        <div><span>Battery</span><strong id="batteryOut">100%</strong></div>
+        <div><span>Position</span><strong id="position">(0, 0)</strong></div>
+        <div><span>Terrain</span><strong id="terrainOut">—</strong></div>
+        <div><span>Path cost</span><strong id="costOut">—</strong></div>
+        <div><span>Path cells</span><strong id="cellsOut">—</strong></div>
+      </div>
+      <div id="message" class="message">Choose a destination and plan a round trip.</div>
+    </aside>
+  </div>
+</section>
+
+<section id="comparison" class="page">
+  <div class="section-head">
+    <div><div class="eyebrow">EXPERIMENT</div><h2>A* vs Dijkstra</h2></div>
+    <button id="compare" class="primary">RUN COMPARISON</button>
+  </div>
+  <p class="muted">Both algorithms receive the same Gale Crater cost map, obstacle map, start and goal, and 4-direction movement model.</p>
+  <div class="compare-grid">
+    <article class="metric-card"><h3>A*</h3><div id="aMetrics">Not run</div></article>
+    <article class="metric-card"><h3>Dijkstra</h3><div id="dMetrics">Not run</div></article>
+  </div>
+  <div class="result" id="comparisonResult">Run the experiment to generate measured results.</div>
+</section>
+
+<section id="terrain" class="page">
+  <div class="section-head"><div><div class="eyebrow">ENVIRONMENT</div><h2>Gale Crater Terrain</h2></div></div>
+  <div class="terrain-grid">
+    <article><h3>Elevation</h3><p id="elevStats">Loading…</p></article>
+    <article><h3>Slope</h3><p id="slopeStats">Loading…</p></article>
+    <article><h3>Obstacle model</h3><p id="obStats">Loading…</p></article>
+  </div>
+  <div class="method">
+    <h3>Environment pipeline</h3>
+    <p>MOLA elevation → Gale Crater extraction → 100×100 navigation grid → slope angle → terrain movement cost → obstacle map → A*/Dijkstra → rover mission.</p>
+  </div>
+</section>
+</main>
+<script src="/static/app.js"></script>
+</body>
+</html>
